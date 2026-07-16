@@ -193,7 +193,7 @@
     }, 3200);
   }
 
-  /* ---------- Full-page bus: roams the viewport in a zig-zag ---------- */
+  /* ---------- Full-page bus: rides a visible zig-zag route ---------- */
   const BUS_SVG_H =
     '<svg viewBox="-34 -32 68 42" aria-hidden="true">' +
     '<g transform="translate(0 -3)">' +
@@ -211,44 +211,90 @@
 
   function initPageBus() {
     if (!motionOk || !window.matchMedia('(min-width: 1100px)').matches) return;
+
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const route = document.createElement('div');
+    route.className = 'page-route';
+    route.setAttribute('aria-hidden', 'true');
+    route.innerHTML =
+      '<svg><defs><linearGradient id="routeGrad" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="#d9a441"/><stop offset="55%" stop-color="#2563eb"/><stop offset="100%" stop-color="#8052ff"/>' +
+      '</linearGradient></defs>' +
+      '<path id="route-track"/><path id="route-done"/></svg>';
+    document.body.appendChild(route);
+
     const bus = document.createElement('div');
     bus.className = 'page-bus-free';
     bus.setAttribute('aria-hidden', 'true');
     bus.innerHTML = BUS_SVG_H;
     document.body.appendChild(bus);
 
-    const WAVES = 3.5;         // full left-right crossings over the page
+    const track = route.querySelector('#route-track');
+    const done = route.querySelector('#route-done');
+    const WAVES = 3;
     const TAU = Math.PI * 2;
-    let current = 0;
-    let idleFrames = 0;
+    let routeLen = 0;
 
-    function pose(p) {
+    // Build the on-screen zig-zag as a real SVG path so the bus can be
+    // placed exactly on the line (skill guidance: motion must trace a
+    // visible, meaningful track — no free-floating decoration).
+    function buildRoute() {
       const W = window.innerWidth;
       const H = window.innerHeight;
-      const margin = 90;
-      const amp = Math.max(120, (W - margin * 2 - 68) / 2);
-      const cx = (W - 68) / 2;
-      const yTop = 130;
-      const yBot = H - 100;
-
-      const x = cx + amp * Math.sin(p * TAU * WAVES);
-      const y = yTop + p * (yBot - yTop);
-
-      // heading from the path derivative; flip the body when driving left
-      const dx = amp * TAU * WAVES * Math.cos(p * TAU * WAVES);
-      const dy = yBot - yTop;
-      const ang = Math.atan2(dy, dx) * 180 / Math.PI;
-      const flip = dx < 0 ? ' scale(1,-1)' : '';
-      bus.style.transform =
-        'translate(' + x + 'px, ' + y + 'px) rotate(' + ang + 'deg)' + flip;
+      const margin = 96;
+      const amp = Math.max(120, (W - margin * 2) / 2 - 40);
+      const cx = W / 2;
+      const yTop = 132;
+      const yBot = H - 84;
+      const pts = [];
+      for (let i = 0; i <= 220; i++) {
+        const p = i / 220;
+        pts.push(
+          (cx + amp * Math.sin(p * TAU * WAVES)).toFixed(1) + ' ' +
+          (yTop + p * (yBot - yTop)).toFixed(1)
+        );
+      }
+      const d = 'M ' + pts.join(' L ');
+      track.setAttribute('d', d);
+      done.setAttribute('d', d);
+      route.querySelector('svg').setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      routeLen = done.getTotalLength();
+      done.style.strokeDasharray = String(routeLen);
     }
+    buildRoute();
+    window.addEventListener('resize', buildRoute);
+
+    let current = 0;
+    let idleFrames = 0;
+    let lastDir = 1;
 
     function frame() {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const target = max > 0 ? window.scrollY / max : 0;
       const delta = target - current;
       current += delta * 0.09;
-      pose(current);
+
+      // reveal the traveled part of the route
+      done.style.strokeDashoffset = String(routeLen * (1 - current));
+
+      // place the bus exactly on the line
+      const at = Math.min(routeLen, Math.max(0, current * routeLen));
+      const pt = done.getPointAtLength(at);
+      const ahead = done.getPointAtLength(Math.min(routeLen, at + 4));
+      const behind = done.getPointAtLength(Math.max(0, at - 4));
+      let dx = ahead.x - behind.x;
+      let dy = ahead.y - behind.y;
+
+      if (Math.abs(delta) > 0.00015) lastDir = delta >= 0 ? 1 : -1;
+      dx *= lastDir;
+      dy *= lastDir;
+
+      const facingLeft = dx < 0;
+      const tilt = Math.max(-30, Math.min(30, Math.atan2(dy, Math.abs(dx)) * 180 / Math.PI));
+      bus.classList.toggle('facing-left', facingLeft);
+      bus.style.transform =
+        'translate(' + pt.x + 'px, ' + (pt.y - 8) + 'px) rotate(' + (facingLeft ? -tilt : tilt) + 'deg)';
+
       if (Math.abs(delta) > 0.0004) {
         idleFrames = 0;
         bus.classList.add('moving');
