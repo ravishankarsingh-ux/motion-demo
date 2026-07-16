@@ -259,6 +259,93 @@
     </div>
   </section>
 
+
+  <!-- OUR CAMPUS (animated illustration) -->
+  <section class="section" aria-labelledby="campus-heading">
+    <div class="container grid-2" style="align-items:center">
+      <div class="reveal" data-reveal="left">
+        <p class="eyebrow">Our campus</p>
+        <h2 id="campus-heading">Sixteen acres where <span class="gradient-text-navy">school feels like home</span></h2>
+        <p class="lede">Heritage red-brick blocks around a banyan courtyard, a clock tower that has kept the school's time since 1962, and playing fields that stay loud till sunset.</p>
+        <a class="btn btn-primary" href="about.html" style="margin-top:var(--space-2)">Explore our story</a>
+      </div>
+      <div class="campus-art reveal" data-reveal="right" role="img" aria-label="Illustration of the Nalanda Public School main building: a red-brick facade with a clock tower, waving flag, trees, drifting clouds, and the morning sun">
+        <svg viewBox="0 0 520 360" aria-hidden="true">
+          <defs>
+            <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#bfe0ff"/><stop offset="70%" stop-color="#eaf4ff"/><stop offset="100%" stop-color="#f6ede0"/>
+            </linearGradient>
+            <linearGradient id="brickG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#c4553d"/><stop offset="100%" stop-color="#a13f2c"/>
+            </linearGradient>
+          </defs>
+          <rect width="520" height="360" fill="url(#skyG)"/>
+
+          <g class="sun">
+            <g class="sun-rays" stroke="#f5b93e" stroke-width="4" stroke-linecap="round">
+              <path d="M448 28v-16M448 92v16M416 60h-16M480 60h16M425 37l-11-11M471 83l11 11M471 37l11-11M425 83l-11 11"/>
+            </g>
+            <circle cx="448" cy="60" r="22" fill="#f8c94f"/>
+          </g>
+
+          <g class="cloud-a" fill="#ffffff" opacity="0.9">
+            <ellipse cx="120" cy="58" rx="34" ry="13"/><ellipse cx="148" cy="50" rx="24" ry="11"/><ellipse cx="96" cy="50" rx="20" ry="10"/>
+          </g>
+          <g class="cloud-b" fill="#ffffff" opacity="0.75">
+            <ellipse cx="300" cy="36" rx="28" ry="11"/><ellipse cx="322" cy="30" rx="18" ry="9"/>
+          </g>
+
+          <g class="bird" stroke="#3f5470" stroke-width="2.4" fill="none" stroke-linecap="round">
+            <path d="M-40 130 q6 -7 12 0 q6 -7 12 0"/>
+          </g>
+          <g class="bird b2" stroke="#3f5470" stroke-width="2" fill="none" stroke-linecap="round">
+            <path d="M-80 100 q5 -6 10 0 q5 -6 10 0"/>
+          </g>
+
+          <!-- clock tower -->
+          <g>
+            <rect x="234" y="96" width="52" height="150" fill="url(#brickG)"/>
+            <path d="M228 96 260 62 292 96 Z" fill="#8c3423"/>
+            <rect x="256" y="52" width="4" height="26" fill="#6b7a90"/>
+            <g class="flag-cloth"><path d="M260 52 L296 58 L260 66 Z" fill="#d9a441"/></g>
+            <circle cx="260" cy="122" r="15" fill="#fdf6e9" stroke="#7a2f1f" stroke-width="3"/>
+            <path d="M260 122V113M260 122l7 5" stroke="#374a63" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="248" y="196" width="24" height="50" rx="11" fill="#5b3323"/>
+            <rect x="252" y="150" width="16" height="22" rx="7" fill="#eaf4ff" class="window-lit w2"/>
+          </g>
+          <!-- wings -->
+          <g>
+            <rect x="60" y="160" width="174" height="86" fill="url(#brickG)"/>
+            <rect x="286" y="160" width="174" height="86" fill="url(#brickG)"/>
+            <path d="M54 160 H240 L234 144 H60 Z" fill="#8c3423"/>
+            <path d="M280 160 H466 L460 144 H286 Z" fill="#8c3423"/>
+            <g fill="#eaf4ff" stroke="#7a2f1f" stroke-width="2">
+              <rect class="window-lit"    x="78"  y="178" width="22" height="28" rx="3"/>
+              <rect                        x="118" y="178" width="22" height="28" rx="3"/>
+              <rect class="window-lit w3"  x="158" y="178" width="22" height="28" rx="3"/>
+              <rect                        x="198" y="178" width="22" height="28" rx="3"/>
+              <rect                        x="302" y="178" width="22" height="28" rx="3"/>
+              <rect class="window-lit w2"  x="342" y="178" width="22" height="28" rx="3"/>
+              <rect                        x="382" y="178" width="22" height="28" rx="3"/>
+              <rect class="window-lit"     x="422" y="178" width="22" height="28" rx="3"/>
+            </g>
+          </g>
+          <!-- ground + path -->
+          <rect y="246" width="520" height="114" fill="#8fbf6f"/>
+          <path d="M244 246 h32 l26 114 h-84 Z" fill="#e5d3ae"/>
+          <!-- trees -->
+          <g>
+            <rect x="34" y="216" width="10" height="42" rx="4" fill="#6b4226"/>
+            <g class="tree-crown"><circle cx="39" cy="196" r="30" fill="#4e9a51"/><circle cx="22" cy="210" r="20" fill="#5fae5f"/><circle cx="58" cy="210" r="20" fill="#458f49"/></g>
+            <rect x="474" y="216" width="10" height="42" rx="4" fill="#6b4226"/>
+            <g class="tree-crown"><circle cx="479" cy="196" r="30" fill="#4e9a51"/><circle cx="462" cy="210" r="20" fill="#458f49"/><circle cx="496" cy="210" r="20" fill="#5fae5f"/></g>
+          </g>
+          <text x="260" y="336" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="600" fill="#5c4a1e">Nalanda Public School · Est. 1962</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
   <!-- WHY NALANDA -->
   <section class="section tinted" aria-labelledby="why-heading">
     <div class="container">
@@ -302,6 +389,88 @@
         <div><span class="stat-value" data-count="4800" data-suffix="+"></span><span class="stat-label">Students across 3 campuses</span></div>
         <div><span class="stat-value" data-count="98" data-suffix="%"></span><span class="stat-label">Board pass rate, 10 years running</span></div>
         <div><span class="stat-value" data-count="120" data-suffix="+"></span><span class="stat-label">Clubs, teams &amp; societies</span></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- THE NALANDA JOURNEY (scroll-driven bus ride) -->
+  <section class="section journey-section" id="journey" aria-labelledby="journey-heading">
+    <div class="container">
+      <div class="reveal" data-reveal="zoom" style="text-align:center">
+        <p class="eyebrow" style="justify-content:center">The Nalanda journey</p>
+        <h2 id="journey-heading">From first bell to farewell — <span class="gradient-text-navy">ride along</span></h2>
+        <p class="lede" style="margin-inline:auto">Keep scrolling: the school bus travels fourteen years in one road.</p>
+      </div>
+      <div class="journey-wrap">
+        <svg id="journey-svg" viewBox="0 0 1000 380" aria-hidden="true">
+          <defs>
+            <linearGradient id="roadGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#d9a441"/><stop offset="50%" stop-color="#2563eb"/><stop offset="100%" stop-color="#8052ff"/>
+            </linearGradient>
+          </defs>
+          <path id="journey-track" d="M 30 330 C 190 330, 210 190, 400 200 C 570 209, 560 340, 730 310 C 890 282, 920 150, 972 108" fill="none" stroke-width="6" stroke-linecap="round"/>
+          <path id="journey-path"  d="M 30 330 C 190 330, 210 190, 400 200 C 570 209, 560 340, 730 310 C 890 282, 920 150, 972 108" fill="none" stroke="url(#roadGrad)" stroke-width="6" stroke-linecap="round"/>
+
+          <g class="milestone" data-f="0.02">
+            <g class="m-pop">
+              <circle r="17" fill="#fff" stroke="#d9a441" stroke-width="3"/>
+              <path d="M0 8 V-2 M0 -2 C -8 -4 -9 -12 -2 -12 C 0 -7 0 -4 0 -2 C 0 -4 0 -7 2 -12 C 9 -12 8 -4 0 -2" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round"/>
+              <text y="38" text-anchor="middle">Nursery</text>
+              <text y="54" text-anchor="middle" class="m-sub">Age 3 · play &amp; phonics</text>
+            </g>
+          </g>
+          <g class="milestone" data-f="0.27">
+            <g class="m-pop">
+              <circle r="17" fill="#fff" stroke="#2563eb" stroke-width="3"/>
+              <path d="M-8 -6 C -4 -9 -1 -9 0 -7 C 1 -9 4 -9 8 -6 V 7 C 4 4 1 4 0 6 C -1 4 -4 4 -8 7 Z" fill="none" stroke="#2563eb" stroke-width="2" stroke-linejoin="round"/>
+              <text y="-30" text-anchor="middle">Primary</text>
+              <text y="-46" text-anchor="middle" class="m-sub" style="display:none">.</text>
+            </g>
+          </g>
+          <g class="milestone" data-f="0.52">
+            <g class="m-pop">
+              <circle r="17" fill="#fff" stroke="#0f766e" stroke-width="3"/>
+              <circle r="8" fill="none" stroke="#0f766e" stroke-width="2"/>
+              <ellipse rx="8" ry="3.2" fill="none" stroke="#0f766e" stroke-width="1.6"/>
+              <path d="M0 -8 V8" stroke="#0f766e" stroke-width="1.6"/>
+              <text y="40" text-anchor="middle">Middle school</text>
+              <text y="56" text-anchor="middle" class="m-sub">Coding · languages</text>
+            </g>
+          </g>
+          <g class="milestone" data-f="0.76">
+            <g class="m-pop">
+              <circle r="17" fill="#fff" stroke="#8052ff" stroke-width="3"/>
+              <path d="M-3 -9 h6 M-1.5 -9 v6 l-6 9 a3 3 0 0 0 2.5 4.5 h10 a3 3 0 0 0 2.5 -4.5 l-6 -9 v-6" fill="none" stroke="#8052ff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+              <text y="-30" text-anchor="middle">Senior school</text>
+            </g>
+          </g>
+          <g class="milestone" data-f="0.985">
+            <g class="m-pop">
+              <circle r="20" fill="#fff" stroke="#d9a441" stroke-width="3"/>
+              <g class="cap-toss-target">
+                <path d="M-11 -2 L0 -8 L11 -2 L0 4 Z" fill="#1e3a5f"/>
+                <path d="M6 1 V 8 M6 8 l0 0" stroke="#d9a441" stroke-width="2"/>
+                <circle cx="6" cy="9.5" r="1.8" fill="#d9a441"/>
+              </g>
+              <text y="44" text-anchor="middle">Class XII</text>
+              <text y="60" text-anchor="middle" class="m-sub">Off to the world</text>
+            </g>
+          </g>
+
+          <g id="journey-bus">
+            <g transform="translate(0 -3)">
+              <rect x="-30" y="-24" width="60" height="21" rx="5" fill="#f6b93b" stroke="#b8862c" stroke-width="1.5"/>
+              <rect x="-25" y="-20" width="10" height="8" rx="1.5" fill="#e8f4ff" stroke="#8a6420" stroke-width="0.8"/>
+              <rect x="-11" y="-20" width="10" height="8" rx="1.5" fill="#e8f4ff" stroke="#8a6420" stroke-width="0.8"/>
+              <rect x="3"   y="-20" width="10" height="8" rx="1.5" fill="#e8f4ff" stroke="#8a6420" stroke-width="0.8"/>
+              <rect x="17"  y="-20" width="10" height="8" rx="1.5" fill="#e8f4ff" stroke="#8a6420" stroke-width="0.8"/>
+              <rect x="-30" y="-9" width="60" height="3.4" fill="#b8862c"/>
+              <g><circle class="bus-wheel" cx="-16" cy="0" r="6.2" fill="#1e293b"/><g class="bus-wheel-spokes" stroke="#94a3b8" stroke-width="1.4"><path d="M-16 -4.5 V4.5 M-20.5 0 H-11.5"/></g></g>
+              <g><circle class="bus-wheel" cx="17" cy="0" r="6.2" fill="#1e293b"/><g class="bus-wheel-spokes" stroke="#94a3b8" stroke-width="1.4"><path d="M17 -4.5 V4.5 M12.5 0 H21.5"/></g></g>
+            </g>
+          </g>
+        </svg>
       </div>
     </div>
   </section>

@@ -68,14 +68,16 @@
     // top progress bar
     scroll((progress) => { bar.style.transform = 'scaleX(' + progress + ')'; });
 
-    // pinned hero: content holds while the lotus blooms, then lifts away
-    const heroInner = document.querySelector('.hero-inner');
+    // pinned hero: the stage stays fully visible for the whole scrub —
+    // only the text column lifts slightly at the very end, and the next
+    // section then covers the stage naturally (no blank frame ever).
+    const heroCopy = document.querySelector('.hero-copy');
     const hero = document.querySelector('.hero');
-    if (hero && heroInner) {
+    if (hero && heroCopy) {
       scroll((p) => {
-        const out = Math.max(0, (p - 0.72) / 0.28);
-        heroInner.style.opacity = String(1 - out);
-        heroInner.style.transform = 'translateY(' + (out * -90) + 'px)';
+        const out = Math.max(0, (p - 0.86) / 0.14);
+        heroCopy.style.opacity = String(1 - out * 0.6);
+        heroCopy.style.transform = 'translateY(' + (out * -40) + 'px)';
       }, { target: hero, offset: ['start start', 'end end'] });
     }
 
@@ -189,6 +191,46 @@
           animate(word, { y: ['115%', 0], opacity: [0, 1] }, { duration: 0.45, ease: [0.22, 1, 0.36, 1] });
         });
     }, 3200);
+  }
+
+  /* ---------- The Nalanda Journey: bus rides the road on scroll ---------- */
+  function initJourney() {
+    const svg = document.getElementById('journey-svg');
+    if (!svg) return;
+    const path = svg.querySelector('#journey-path');
+    const bus = svg.querySelector('#journey-bus');
+    const milestones = Array.from(svg.querySelectorAll('.milestone'));
+    const len = path.getTotalLength();
+    path.style.strokeDasharray = String(len);
+
+    milestones.forEach((m) => {
+      const f = parseFloat(m.dataset.f);
+      const pt = path.getPointAtLength(f * len);
+      m.setAttribute('transform', 'translate(' + pt.x + ' ' + pt.y + ')');
+    });
+
+    function setJourney(raw) {
+      const t = Math.min(1, Math.max(0, raw));
+      path.style.strokeDashoffset = String(len * (1 - t));
+      milestones.forEach((m) => {
+        m.classList.toggle('hit', t >= parseFloat(m.dataset.f));
+      });
+      if (bus) {
+        const bt = Math.min(t, 0.985) * len;
+        const pt = path.getPointAtLength(bt);
+        const ahead = path.getPointAtLength(Math.min(len, bt + 2));
+        const behind = path.getPointAtLength(Math.max(0, bt - 2));
+        const ang = Math.atan2(ahead.y - behind.y, ahead.x - behind.x) * 180 / Math.PI;
+        bus.setAttribute('transform', 'translate(' + pt.x + ' ' + pt.y + ') rotate(' + ang + ')');
+      }
+    }
+
+    if (!motionOk) { setJourney(1); return; }
+    setJourney(0);
+    window.Motion.scroll((p) => setJourney(p), {
+      target: svg.closest('.journey-section'),
+      offset: ['start 0.85', 'end 0.5'],
+    });
   }
 
   /* ---------- Marquee gallery ---------- */
@@ -432,6 +474,7 @@
     initScrollFx(bar);
     initBloom();
     initHeroText();
+    initJourney();
     initReveals();
     initGalleryMarquee();
     initTilt();
