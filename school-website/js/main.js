@@ -1,4 +1,4 @@
-/* Nalanda Public School — shared behavior.
+/* JDS Public School — shared behavior.
    Uses Motion (vendor/motion.min.js, window.Motion) for scroll
    animations. Everything degrades gracefully: content stays
    visible if Motion is missing or reduced motion is requested. */
@@ -193,7 +193,55 @@
     }, 3200);
   }
 
-  /* ---------- The Nalanda Journey: bus rides the road on scroll ---------- */
+  /* ---------- Full-page bus: rides the right edge with the scroll ---------- */
+  const BUS_SVG =
+    '<svg viewBox="-34 -32 68 42" aria-hidden="true"><g transform="rotate(90)">' +
+    '<g transform="translate(0 -3)">' +
+    '<rect x="-30" y="-24" width="60" height="21" rx="5" fill="#f6b93b" stroke="#b8862c" stroke-width="1.5"/>' +
+    '<rect x="-25" y="-20" width="10" height="8" rx="1.5" fill="#e8f4ff" stroke="#8a6420" stroke-width="0.8"/>' +
+    '<rect x="-11" y="-20" width="10" height="8" rx="1.5" fill="#e8f4ff" stroke="#8a6420" stroke-width="0.8"/>' +
+    '<rect x="3" y="-20" width="10" height="8" rx="1.5" fill="#e8f4ff" stroke="#8a6420" stroke-width="0.8"/>' +
+    '<rect x="17" y="-20" width="10" height="8" rx="1.5" fill="#e8f4ff" stroke="#8a6420" stroke-width="0.8"/>' +
+    '<rect x="-30" y="-9" width="60" height="3.4" fill="#b8862c"/>' +
+    '<circle cx="-16" cy="0" r="6.2" fill="#1e293b"/>' +
+    '<g class="bus-wheel-spokes" stroke="#94a3b8" stroke-width="1.4"><path d="M-16 -4.5 V4.5 M-20.5 0 H-11.5"/></g>' +
+    '<circle cx="17" cy="0" r="6.2" fill="#1e293b"/>' +
+    '<g class="bus-wheel-spokes" stroke="#94a3b8" stroke-width="1.4"><path d="M17 -4.5 V4.5 M12.5 0 H21.5"/></g>' +
+    '</g></g></svg>';
+
+  function initPageBus() {
+    if (!motionOk || !window.matchMedia('(min-width: 1100px)').matches) return;
+    const lane = document.createElement('div');
+    lane.className = 'page-bus-lane';
+    lane.setAttribute('aria-hidden', 'true');
+    const bus = document.createElement('div');
+    bus.className = 'page-bus';
+    bus.innerHTML = BUS_SVG;
+    lane.appendChild(bus);
+    document.body.appendChild(lane);
+
+    let current = 0;
+    let idleFrames = 0;
+    function frame() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const target = max > 0 ? window.scrollY / max : 0;
+      const delta = target - current;
+      current += delta * 0.1;
+      const laneH = lane.clientHeight - 46;
+      const lean = Math.max(-16, Math.min(16, delta * 900));
+      bus.style.transform = 'translateY(' + (current * laneH) + 'px) rotate(' + lean + 'deg)';
+      if (Math.abs(delta) > 0.0004) {
+        idleFrames = 0;
+        bus.classList.add('moving');
+      } else if (++idleFrames > 18) {
+        bus.classList.remove('moving');
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  /* ---------- The JDS Journey: bus rides the road on scroll ---------- */
   function initJourney() {
     const svg = document.getElementById('journey-svg');
     if (!svg) return;
@@ -336,8 +384,13 @@
     const date = new Date(item.date).toLocaleDateString('en-IN', {
       day: 'numeric', month: 'long', year: 'numeric',
     });
+    const KW = { Achievement: 'trophy', Event: 'school,festival', Notice: 'school,building', Academics: 'classroom' };
+    const lock = Math.abs(item.title.length * 7 + item.date.charCodeAt(9)) % 90;
     card.innerHTML =
-      '<div class="thumb ' + tone + '">' + icon + '</div>' +
+      '<div class="thumb ' + tone + '">' +
+      '<img class="thumb-img" loading="lazy" alt="" src="https://loremflickr.com/640/360/' + (KW[item.category] || 'school') + '?lock=' + lock + '" ' +
+      'onload="this.parentElement.classList.add(\'has-img\')" onerror="this.remove()">' +
+      icon + '</div>' +
       '<div class="news-body">' +
       '  <div class="news-meta"><span class="tag"></span><time datetime="' + item.date + '"></time></div>' +
       '  <h3></h3><p></p>' +
@@ -475,6 +528,7 @@
     initBloom();
     initHeroText();
     initJourney();
+    initPageBus();
     initReveals();
     initGalleryMarquee();
     initTilt();

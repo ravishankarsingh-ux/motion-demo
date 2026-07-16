@@ -1,4 +1,4 @@
-/* Nalanda Public School — Three.js hero scene.
+/* JDS Public School — Three.js hero scene.
    A slowly drifting "constellation of knowledge": golden particle
    field, wireframe icosahedra and a torus-knot, with gentle mouse
    parallax and scroll-linked camera dolly. Renders a single static

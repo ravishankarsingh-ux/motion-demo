@@ -1,4 +1,4 @@
-# Nalanda Public School — website
+# JDS Public School — website
 
 A multi-page, interactive website for a fictional K-12 school in the spirit of a large Indian public school (Delhi Public School style). Fully static — deployable on GitHub Pages or any web server — with generated demonstration content.
 
