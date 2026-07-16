@@ -1,0 +1,11 @@
+{
+  "_comment": "School staff: edit this file to update the events calendar. Use ISO dates (YYYY-MM-DD). Keep events in chronological order.",
+  "events": [
+    { "date": "2026-07-20", "title": "School reopens — Monsoon term begins", "details": "All classes resume. Primary wing assembly at 8:00 AM." },
+    { "date": "2026-07-25", "title": "Parent–Teacher Meeting (Classes VI–X)", "details": "9:00 AM – 12:30 PM, respective classrooms. Slot bookings via class teachers." },
+    { "date": "2026-07-28", "title": "Annual Production auditions", "details": "Amphitheatre, 3:00 PM onwards. Open to classes VIII–XII." },
+    { "date": "2026-08-05", "title": "Inter-House Debate — Finals", "details": "Seminar Hall, 10:00 AM. Streamed live in the Virtual Classroom." },
+    { "date": "2026-08-14", "title": "Independence Day celebrations", "details": "Flag hoisting 8:00 AM, cultural programme follows. Parents welcome." },
+    { "date": "2026-08-15", "title": "Admissions 2026–27 close", "details": "Last date to submit online applications for all classes." }
+  ]
+}

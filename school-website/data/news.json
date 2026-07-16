@@ -1,0 +1,47 @@
+{
+  "_comment": "School staff: edit this file to update news and the homepage ticker. Each item needs a date (YYYY-MM-DD), category (Achievement | Event | Notice | Academics), title, and summary. Newest dates are shown first automatically.",
+  "announcements": [
+    "Admissions open for Academic Year 2026–27 — apply before 15 August 2026",
+    "PTM for Classes VI–X on Saturday, 25 July 2026, 9:00 AM – 12:30 PM",
+    "School reopens after summer break on Monday, 20 July 2026",
+    "Inter-House Debate finals will be streamed live in the Virtual Classroom"
+  ],
+  "items": [
+    {
+      "date": "2026-07-12",
+      "category": "Achievement",
+      "title": "Aarav Mehta (XII-A) secures All-India Rank 14 in the National Science Olympiad",
+      "summary": "Our senior science stream continues its Olympiad streak — twelve students cleared the second round, with Aarav reaching the national top twenty."
+    },
+    {
+      "date": "2026-07-10",
+      "category": "Notice",
+      "title": "Revised school timings for the monsoon term",
+      "summary": "From 20 July, the school day runs 7:50 AM to 1:40 PM for the primary wing and 7:50 AM to 2:30 PM for classes VI–XII. Bus routes leave 15 minutes earlier."
+    },
+    {
+      "date": "2026-07-08",
+      "category": "Event",
+      "title": "Annual Production 2026: 'The Palace of Illusions' — auditions announced",
+      "summary": "The theatre department invites students of classes VIII–XII to audition on 28–29 July in the Amphitheatre. Backstage, lighting, and set-design crews also welcome."
+    },
+    {
+      "date": "2026-07-05",
+      "category": "Academics",
+      "title": "New AI & Data Science elective introduced for Classes XI–XII",
+      "summary": "In partnership with IIT-Delhi's outreach programme, senior students can now opt for a two-year applied AI elective with a project-based curriculum."
+    },
+    {
+      "date": "2026-06-28",
+      "category": "Achievement",
+      "title": "U-17 girls' basketball team wins the Zonal Championship",
+      "summary": "An undefeated run through the zonals takes our team to the state finals in Bhopal this September. Congratulations, Nalanda Lionesses!"
+    },
+    {
+      "date": "2026-06-20",
+      "category": "Event",
+      "title": "Van Mahotsav week: 1,200 saplings planted by the Eco Club",
+      "summary": "Students, parents, and staff joined hands across all three campuses. Each sapling is tagged and tracked by the middle-school biodiversity project."
+    }
+  ]
+}
