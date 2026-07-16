@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "school-website/**"
+      - "school-website-light/**"
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
@@ -33,10 +34,16 @@ jobs:
         with:
           enablement: true
 
+      - name: Assemble site (dark at root, light at /light/)
+        run: |
+          mkdir -p _site
+          cp -r school-website/. _site/
+          cp -r school-website-light _site/light
+
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: school-website
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment

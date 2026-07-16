@@ -1,0 +1,77 @@
+/* ============================================================
+   JDS Public School — light edition. Loaded after styles.css.
+   Everything bright and airy: no dark hero, no dark bands.
+   ============================================================ */
+
+/* ---------- Hero: morning-sky gradient instead of night ---------- */
+.hero-sticky {
+  background: linear-gradient(165deg, #f5f9fe 0%, #e9f1fb 55%, #fdf3dd 100%);
+  color: var(--color-foreground);
+}
+.hero h1 { color: var(--color-primary-deep); }
+.hero .lede { color: var(--color-muted-text); }
+.hero .eyebrow { color: var(--color-accent-deep); }
+.hero-badge {
+  border-color: rgba(30, 58, 95, 0.16);
+  background: rgba(255, 255, 255, 0.65);
+  color: #35455c;
+}
+.hero-badge svg { color: var(--color-accent-deep); }
+.hero .btn-outline.on-dark { color: var(--color-primary); border-color: currentColor; }
+.hero .btn-outline.on-dark:hover { background: rgba(30, 58, 95, 0.06); }
+.hero-scroll-hint, .bloom-hint { color: #8fa2bb; }
+.hero-bloom { filter: drop-shadow(0 20px 44px rgba(236, 72, 153, 0.2)); }
+.word-rotate { perspective: 640px; }
+
+/* ---------- Announcement bar: warm paper strip ---------- */
+.announce-bar { background: #fdf3dd; color: #5c4a1e; border-bottom: 1px solid #f0e2bd; }
+.announce-label { color: var(--color-accent-deep); }
+
+/* ---------- Stats band: airy blue instead of navy ---------- */
+.stats-band {
+  background: linear-gradient(160deg, #eef4fb, #e3ecf7);
+  color: var(--color-foreground);
+  border-block: 1px solid #dbe6f2;
+}
+.stat-value { color: var(--color-primary); }
+.stat-label { color: #5b6b80; }
+
+/* ---------- CTA band: white card with the gradient border ---------- */
+.cta-band {
+  background:
+    linear-gradient(150deg, #ffffff 0%, #f6f9fd 70%) padding-box,
+    linear-gradient(120deg, #d9a441, #f472b6, #8052ff, #d9a441) border-box;
+  color: var(--color-foreground);
+}
+.cta-band h2 { color: var(--color-primary-deep); }
+.cta-band p { color: var(--color-muted-text); }
+.cta-band .btn-outline.on-dark { color: var(--color-primary); }
+.cta-band .btn-outline.on-dark:hover { background: rgba(30, 58, 95, 0.06); }
+.cta-band::before { background: radial-gradient(circle, rgba(217, 164, 65, 0.22), transparent 65%); }
+.cta-band::after { background: radial-gradient(circle, rgba(128, 82, 255, 0.16), transparent 65%); }
+
+/* ---------- Page heroes (sub-pages): daylight ---------- */
+.page-hero {
+  background:
+    radial-gradient(900px 420px at 85% 0%, rgba(217, 164, 65, 0.14), transparent 60%),
+    linear-gradient(165deg, #f5f9fe, #e9f1fb);
+  color: var(--color-foreground);
+}
+.page-hero h1 { color: var(--color-primary-deep); }
+.page-hero .lede { color: var(--color-muted-text); }
+.page-hero::after { background: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.08), transparent 65%); }
+
+/* ---------- Footer: light parchment ---------- */
+.site-footer { background: #eef2f8; color: #46566b; border-top: 1px solid #dbe4ee; }
+.site-footer h3 { color: var(--color-primary-deep); }
+.site-footer a { color: #46566b; }
+.site-footer a:hover { color: var(--color-primary); }
+.footer-bottom { border-top-color: #d5dfeb; }
+
+/* ---------- Retired roaming bus in this edition too ---------- */
+.page-route, .page-bus-free { display: none !important; }
+
+/* Motion drives transforms via springs here — CSS transitions on
+   transform would fight it, so limit them to shadows. */
+.card, .news-card, .photo-tile, .quick-link { transition-property: box-shadow; }
+.card:hover, .news-card:hover, .quick-link:hover { transform: none; }
