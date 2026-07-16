@@ -608,7 +608,6 @@
     initBloom();
     initHeroText();
     initJourney();
-    initPageBus();
     initReveals();
     initGalleryMarquee();
     initTilt();
