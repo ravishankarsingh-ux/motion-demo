@@ -1,0 +1,12 @@
+{
+  "name": "motion-demo",
+  "version": "1.0.0",
+  "description": "Demo project using the Motion animation library (github.com/motiondivision/motion)",
+  "scripts": {
+    "start": "npx -y serve ."
+  },
+  "license": "MIT",
+  "dependencies": {
+    "motion": "^12.42.2"
+  }
+}

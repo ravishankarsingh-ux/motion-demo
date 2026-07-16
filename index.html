@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motion Demo</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font-family: system-ui, sans-serif;
+    background: #0a0a0d;
+    color: #f2f2f5;
+    min-height: 100vh;
+  }
+  main { max-width: 720px; margin: 0 auto; padding: 4rem 1.5rem; }
+  h1 { font-size: 2.4rem; margin-bottom: 0.5rem; }
+  p.sub { color: #9a9aa5; margin-bottom: 3rem; }
+  .row { display: flex; gap: 1rem; margin-bottom: 3rem; }
+  .box {
+    width: 72px; height: 72px; border-radius: 14px;
+    background: linear-gradient(160deg, #8052ff, #4f8bff);
+  }
+  .box:nth-child(2) { background: linear-gradient(160deg, #ffb829, #ff5fa8); }
+  .box:nth-child(3) { background: linear-gradient(160deg, #15846e, #4f8bff); }
+  .box:nth-child(4) { background: linear-gradient(160deg, #ff5fa8, #8052ff); }
+  button {
+    font: inherit; color: inherit; cursor: pointer;
+    background: #8052ff; border: none; border-radius: 10px;
+    padding: 0.7rem 1.4rem; margin-bottom: 4rem;
+  }
+  .spacer { height: 60vh; display: grid; place-items: center; color: #55555f; }
+  .card {
+    background: #16161c; border: 1px solid #26262e; border-radius: 16px;
+    padding: 2rem; margin-bottom: 1.5rem;
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Motion Demo</h1>
+  <p class="sub">Vanilla JS examples using <code>motion</code> from npm.</p>
+
+  <div class="row" id="boxes">
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+  </div>
+
+  <button id="replay">Replay stagger</button>
+
+  <div class="spacer">scroll down for in-view reveals…</div>
+
+  <div class="card reveal"><h2>inView reveal</h2><p>This card animates in when it enters the viewport.</p></div>
+  <div class="card reveal"><h2>Another card</h2><p>Each reveal card gets its own scroll-triggered animation.</p></div>
+  <div class="card reveal"><h2>Springs included</h2><p>Motion ships spring physics, timelines, and scroll animations.</p></div>
+</main>
+
+<!-- UMD bundle from the npm package; exposes window.Motion -->
+<script src="./node_modules/motion/dist/motion.js"></script>
+<script>
+  const { animate, inView, stagger } = Motion;
+
+  function playStagger() {
+    animate(
+      '#boxes .box',
+      { y: [40, 0], opacity: [0, 1], rotate: [12, 0] },
+      { type: 'spring', stiffness: 200, damping: 18, delay: stagger(0.1) }
+    );
+  }
+
+  playStagger();
+  document.getElementById('replay').addEventListener('click', playStagger);
+
+  inView('.reveal', (el) => {
+    animate(el, { opacity: [0, 1], y: [32, 0] }, { duration: 0.6, ease: [0.22, 1, 0.36, 1] });
+  }, { amount: 0.4 });
+
+  document.querySelectorAll('.reveal').forEach((el) => { el.style.opacity = '0'; });
+</script>
+</body>
+</html>
