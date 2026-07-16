@@ -35,18 +35,82 @@
     });
   }
 
+  /* ---------- Decorative blobs + scroll progress (injected) ---------- */
+  function injectDecor() {
+    const bar = document.createElement('div');
+    bar.className = 'scroll-progress';
+    bar.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bar);
+
+    document.querySelectorAll('.hero-sticky, .page-hero, .section.tinted, .cta-band').forEach((host, i) => {
+      const blobs = ['gold', i % 2 ? 'violet' : 'cyan', i % 2 ? 'rose' : 'violet'];
+      blobs.forEach((tone, j) => {
+        const b = document.createElement('div');
+        b.className = 'blob ' + tone;
+        b.setAttribute('aria-hidden', 'true');
+        b.dataset.parallax = (0.12 + j * 0.09).toFixed(2);
+        const size = 220 + j * 120;
+        b.style.width = b.style.height = size + 'px';
+        b.style.top = [(-8 - j * 6), 55, 20][j] + '%';
+        b.style[j % 2 ? 'right' : 'left'] = [(-6), (-8), 60][j] + '%';
+        host.appendChild(b);
+      });
+      if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+    });
+    return bar;
+  }
+
+  /* ---------- Scroll-linked effects ---------- */
+  function initScrollFx(bar) {
+    if (!motionOk) return;
+    const { scroll } = window.Motion;
+
+    // top progress bar
+    scroll((progress) => { bar.style.transform = 'scaleX(' + progress + ')'; });
+
+    // pinned hero: content holds while the lotus blooms, then lifts away
+    const heroInner = document.querySelector('.hero-inner');
+    const hero = document.querySelector('.hero');
+    if (hero && heroInner) {
+      scroll((p) => {
+        const out = Math.max(0, (p - 0.72) / 0.28);
+        heroInner.style.opacity = String(1 - out);
+        heroInner.style.transform = 'translateY(' + (out * -90) + 'px)';
+      }, { target: hero, offset: ['start start', 'end end'] });
+    }
+
+    // parallax blobs — each moves at its own speed while its host scrolls
+    document.querySelectorAll('[data-parallax]').forEach((el) => {
+      const speed = parseFloat(el.dataset.parallax) || 0.15;
+      scroll((p) => {
+        el.style.translate = '0 ' + ((p - 0.5) * -320 * speed) + 'px';
+      }, { target: el.parentElement, offset: ['start end', 'end start'] });
+    });
+
+    // photo tiles drift subtly against scroll for depth
+    document.querySelectorAll('.grid-tiles .photo-tile').forEach((tile, i) => {
+      scroll((p) => {
+        tile.style.translate = '0 ' + ((p - 0.5) * (i % 2 ? -36 : 36)) + 'px';
+      }, { target: tile.parentElement, offset: ['start end', 'end start'] });
+    });
+  }
+
   /* ---------- Scroll reveal animations ---------- */
+  const REVEAL_VARIANTS = {
+    up:    { opacity: [0, 1], y: [40, 0], filter: ['blur(8px)', 'blur(0px)'] },
+    left:  { opacity: [0, 1], x: [-64, 0], filter: ['blur(6px)', 'blur(0px)'] },
+    right: { opacity: [0, 1], x: [64, 0], filter: ['blur(6px)', 'blur(0px)'] },
+    zoom:  { opacity: [0, 1], scale: [0.86, 1], filter: ['blur(6px)', 'blur(0px)'] },
+  };
+
   function initReveals() {
     if (!motionOk) return;
     const { animate, inView, stagger } = window.Motion;
 
     document.querySelectorAll('.reveal').forEach((el) => {
+      const variant = REVEAL_VARIANTS[el.dataset.reveal] || REVEAL_VARIANTS.up;
       inView(el, (target) => {
-        animate(
-          target,
-          { opacity: [0, 1], y: [34, 0] },
-          { duration: 0.7, ease: [0.22, 1, 0.36, 1] }
-        );
+        animate(target, variant, { duration: 0.8, ease: [0.22, 1, 0.36, 1] });
       }, { amount: 0.18 });
     });
 
@@ -58,10 +122,117 @@
       inView(group, () => {
         animate(
           items,
-          { opacity: [0, 1], y: [26, 0] },
-          { duration: 0.55, delay: stagger(0.08), ease: [0.22, 1, 0.36, 1] }
+          { opacity: [0, 1], y: [40, 0], scale: [0.94, 1] },
+          { duration: 0.6, delay: stagger(0.09), ease: [0.22, 1, 0.36, 1] }
         );
-      }, { amount: 0.15 });
+      }, { amount: 0.12 });
+    });
+  }
+
+  /* ---------- Hero: lotus bloom scrubbed by scroll ---------- */
+  function initBloom() {
+    const svg = document.getElementById('bloom-svg');
+    const hero = document.querySelector('.hero');
+    if (!svg || !hero) return;
+
+    const petals = Array.from(svg.querySelectorAll('.petal'));
+    const core = svg.querySelector('.bloom-core');
+    const glow = svg.querySelector('.bloom-glow');
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+    function setBloom(raw) {
+      const t = easeOut(Math.min(1, Math.max(0, raw)));
+      petals.forEach((petal) => {
+        const a = parseFloat(petal.dataset.a);
+        const rot = a * (0.07 + 0.79 * t);
+        const sx = 0.6 + 0.4 * t;
+        const sy = 0.42 + 0.58 * t;
+        petal.setAttribute(
+          'transform',
+          'translate(100 168) rotate(' + rot + ') scale(' + sx + ' ' + sy + ') translate(-100 -168)'
+        );
+      });
+      if (core) core.setAttribute('r', String(4 + 6 * t));
+      if (glow) glow.setAttribute('opacity', String(0.08 + 0.5 * t));
+    }
+
+    if (!motionOk) { setBloom(1); return; }
+    setBloom(0);
+    window.Motion.scroll((p) => setBloom(p * 1.45), {
+      target: hero,
+      offset: ['start start', 'end end'],
+    });
+  }
+
+  /* ---------- Hero: entrance + rotating headline word ---------- */
+  const ROTATE_WORDS = ['confident leaders.', 'curious thinkers.', 'bold artists.', 'strong athletes.', 'kind citizens.'];
+
+  function initHeroText() {
+    const copy = document.querySelector('.hero-copy');
+    if (!copy || !motionOk) return;
+    const { animate, stagger } = window.Motion;
+
+    animate(
+      copy.children,
+      { opacity: [0, 1], y: [42, 0], filter: ['blur(10px)', 'blur(0px)'] },
+      { duration: 0.9, delay: stagger(0.13), ease: [0.22, 1, 0.36, 1] }
+    );
+
+    const word = document.getElementById('rotate-word');
+    if (!word) return;
+    let i = 0;
+    setInterval(() => {
+      animate(word, { y: [0, '-115%'], opacity: [1, 0] }, { duration: 0.35, ease: 'easeIn' })
+        .finished.then(() => {
+          i = (i + 1) % ROTATE_WORDS.length;
+          word.textContent = ROTATE_WORDS[i];
+          animate(word, { y: ['115%', 0], opacity: [0, 1] }, { duration: 0.45, ease: [0.22, 1, 0.36, 1] });
+        });
+    }, 3200);
+  }
+
+  /* ---------- Marquee gallery ---------- */
+  function initGalleryMarquee() {
+    const track = document.querySelector('.gallery-track');
+    if (!track) return;
+    // duplicate tiles for a seamless loop
+    track.append(...Array.from(track.children).map((n) => {
+      const c = n.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      return c;
+    }));
+    if (!motionOk) return;
+    const distance = track.scrollWidth / 2;
+    const anim = window.Motion.animate(
+      track,
+      { x: [0, -distance] },
+      { duration: Math.max(30, distance / 60), ease: 'linear', repeat: Infinity }
+    );
+    track.addEventListener('pointerenter', () => anim.pause());
+    track.addEventListener('pointerleave', () => anim.play());
+  }
+
+  /* ---------- 3D tilt on cards & tiles ---------- */
+  function initTilt() {
+    if (!motionOk || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    document.querySelectorAll('.photo-tile, .card').forEach((el) => {
+      el.setAttribute('data-tilt', '');
+      let raf = 0;
+      el.addEventListener('pointermove', (e) => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const r = el.getBoundingClientRect();
+          const rx = ((e.clientY - r.top) / r.height - 0.5) * -9;
+          const ry = ((e.clientX - r.left) / r.width - 0.5) * 9;
+          el.style.transform = 'perspective(900px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-4px)';
+        });
+      });
+      el.addEventListener('pointerleave', () => {
+        el.style.transition = 'transform 350ms cubic-bezier(0.22, 1, 0.36, 1)';
+        el.style.transform = '';
+        setTimeout(() => { el.style.transition = ''; }, 380);
+      });
     });
   }
 
@@ -257,7 +428,13 @@
 
   /* ---------- Boot ---------- */
   document.addEventListener('DOMContentLoaded', () => {
+    const bar = injectDecor();
+    initScrollFx(bar);
+    initBloom();
+    initHeroText();
     initReveals();
+    initGalleryMarquee();
+    initTilt();
     initStats();
     loadNews();
     loadEvents();

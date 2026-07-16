@@ -73,7 +73,7 @@ function init(canvas) {
     roughness: 0.3,
     wireframe: true,
     transparent: true,
-    opacity: 0.85,
+    opacity: 0.5,
   });
   const solidMat = new THREE.MeshStandardMaterial({
     color: 0x2f5c96,
@@ -83,11 +83,11 @@ function init(canvas) {
   });
 
   const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(2.1, 0.55, 140, 18), wireMat);
-  knot.position.set(5.4, 0.4, -2);
+  knot.position.set(-10.5, 5.2, -10);
   shapes.add(knot);
 
   const icoBig = new THREE.Mesh(new THREE.IcosahedronGeometry(1.5, 0), solidMat);
-  icoBig.position.set(-6.5, 2.2, -4);
+  icoBig.position.set(7.6, 4.2, -8);
   shapes.add(icoBig);
 
   const icoSmall = new THREE.Mesh(new THREE.IcosahedronGeometry(0.8, 0), wireMat.clone());
@@ -96,7 +96,7 @@ function init(canvas) {
 
   const octa = new THREE.Mesh(new THREE.OctahedronGeometry(0.9, 0), solidMat.clone());
   octa.material.color.set(0xd9a441);
-  octa.position.set(3.2, -3.1, -5);
+  octa.position.set(-4.2, -3.4, -5);
   shapes.add(octa);
 
   const ring = new THREE.Mesh(
@@ -156,7 +156,7 @@ function init(canvas) {
     knot.rotation.y = t * 0.12;
     ring.rotation.z = t * 0.1;
     icoBig.rotation.y = t * 0.25;
-    icoBig.position.y = 2.2 + Math.sin(t * 0.7) * 0.35;
+    icoBig.position.y = 4.2 + Math.sin(t * 0.7) * 0.35;
     icoSmall.rotation.x = t * 0.3;
     icoSmall.position.y = -2.6 + Math.sin(t * 0.9 + 1.5) * 0.3;
     octa.rotation.y = t * 0.35;

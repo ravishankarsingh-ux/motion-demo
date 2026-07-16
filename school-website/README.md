@@ -16,7 +16,7 @@ A multi-page, interactive website for a fictional K-12 school in the spirit of a
 
 ## Tech
 
-- **Motion** (`vendor/motion.min.js`, UMD) — scroll-reveal animations, staggered grids, animated statistics, the announcement marquee. Loaded on every page via `js/main.js`.
+- **Motion** (`vendor/motion.min.js`, UMD) — scroll-scrubbed lotus bloom in the pinned hero, scroll progress bar, parallax blobs, blur-in reveals, staggered grids, animated statistics, marquee galleries, 3D tilt cards, rotating headline word. Loaded on every page via `js/main.js`.
 - **Three.js** (`vendor/three.module.min.js`, ES module + import map) — the homepage hero: a golden particle constellation with floating wireframe geometry, pointer parallax, and a scroll-linked camera. Pauses off-screen; renders a single static frame under `prefers-reduced-motion`.
 - No build step, no framework, no external CDNs at runtime except Google Fonts.
 

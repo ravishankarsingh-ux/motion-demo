@@ -832,3 +832,294 @@ html.motion-ok .reveal { opacity: 0; }
 }
 
 table caption { text-align: left; }
+
+/* ============================================================
+   v2 — "lush" upgrade: scroll-linked effects, gradient photo
+   tiles, marquee gallery, blobs, tilt cards, gradient text.
+   ============================================================ */
+
+/* Scroll progress bar (injected by JS) */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 4px;
+  z-index: calc(var(--z-nav) + 1);
+  background: linear-gradient(90deg, #d9a441, #ff8a5c, #8052ff, #2563eb);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+/* Decorative gradient blobs (injected by JS into heroes/sections) */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 0;
+}
+.blob.gold   { background: radial-gradient(circle, rgba(255,196,86,0.85), transparent 65%); }
+.blob.violet { background: radial-gradient(circle, rgba(128,82,255,0.75), transparent 65%); }
+.blob.cyan   { background: radial-gradient(circle, rgba(56,189,248,0.7), transparent 65%); }
+.blob.rose   { background: radial-gradient(circle, rgba(244,114,182,0.65), transparent 65%); }
+
+@keyframes blob-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(30px, -40px) scale(1.12); }
+  66%      { transform: translate(-25px, 25px) scale(0.94); }
+}
+.blob { animation: blob-drift 14s ease-in-out infinite; }
+.blob:nth-child(2) { animation-duration: 18s; animation-delay: -6s; }
+.blob:nth-child(3) { animation-duration: 22s; animation-delay: -12s; }
+@media (prefers-reduced-motion: reduce) { .blob { animation: none; } }
+
+/* Gradient headline text */
+.gradient-text {
+  background: linear-gradient(92deg, #ffd98a 0%, #d9a441 35%, #ff9d6f 70%, #f472b6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.gradient-text-navy {
+  background: linear-gradient(92deg, #1e3a5f 0%, #2563eb 60%, #8052ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Gradient photo tiles (image placeholders) ---------- */
+.photo-tile {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: flex-end;
+  color: #fff;
+  box-shadow: var(--shadow-card);
+  transform-style: preserve-3d;
+  transition: box-shadow 250ms ease-out;
+  isolation: isolate;
+}
+.photo-tile:hover { box-shadow: 0 18px 50px rgba(15, 23, 42, 0.3); }
+
+.photo-tile .tile-bg {
+  position: absolute; inset: 0;
+  background-size: 220% 220%;
+  animation: tile-gradient 9s ease-in-out infinite;
+}
+@keyframes tile-gradient {
+  0%, 100% { background-position: 0% 40%; }
+  50%      { background-position: 100% 60%; }
+}
+@media (prefers-reduced-motion: reduce) { .photo-tile .tile-bg { animation: none; } }
+
+.tile-bg.t-robotics { background-image: linear-gradient(135deg, #312e81, #6d28d9, #2563eb); }
+.tile-bg.t-pool     { background-image: linear-gradient(135deg, #0e7490, #0ea5e9, #22d3ee); }
+.tile-bg.t-theatre  { background-image: linear-gradient(135deg, #9d174d, #ec4899, #f97316); }
+.tile-bg.t-library  { background-image: linear-gradient(135deg, #92400e, #d9a441, #fbbf24); }
+.tile-bg.t-cricket  { background-image: linear-gradient(135deg, #14532d, #16a34a, #84cc16); }
+.tile-bg.t-music    { background-image: linear-gradient(135deg, #4c1d95, #8052ff, #c084fc); }
+.tile-bg.t-astro    { background-image: linear-gradient(135deg, #0f172a, #1e3a5f, #4f46e5); }
+.tile-bg.t-art      { background-image: linear-gradient(135deg, #c2410c, #f97316, #f472b6); }
+
+.photo-tile .tile-glow {
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.35), transparent 45%);
+  mix-blend-mode: soft-light;
+}
+.photo-tile .tile-icon {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-52%, -62%);
+  opacity: 0.9;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
+}
+.photo-tile .tile-label {
+  position: relative;
+  width: 100%;
+  padding: 2.4rem 1.1rem 0.9rem;
+  font-weight: 700;
+  font-size: 0.98rem;
+  letter-spacing: 0.02em;
+  background: linear-gradient(transparent, rgba(10, 16, 28, 0.78));
+  text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+}
+.photo-tile .tile-label small {
+  display: block;
+  font-weight: 500;
+  font-size: 0.76rem;
+  opacity: 0.85;
+}
+
+/* shine sweep on hover */
+.photo-tile::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -80%;
+  width: 55%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: skewX(-18deg);
+  transition: left 650ms ease-out;
+  z-index: 2;
+}
+.photo-tile:hover::after { left: 130%; }
+
+/* ---------- Marquee gallery ---------- */
+.gallery-marquee {
+  overflow: hidden;
+  padding-block: var(--space-2);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.gallery-track {
+  display: flex;
+  gap: var(--space-3);
+  width: max-content;
+  will-change: transform;
+}
+.gallery-track .photo-tile {
+  width: min(320px, 72vw);
+  flex: none;
+}
+
+/* ---------- Alternating section tints ---------- */
+.section.tinted {
+  background:
+    radial-gradient(900px 420px at 90% -10%, rgba(217, 164, 65, 0.12), transparent 60%),
+    radial-gradient(800px 420px at -10% 110%, rgba(37, 99, 235, 0.1), transparent 60%),
+    linear-gradient(180deg, #f2f6fb, #f8fafc);
+}
+
+/* ---------- Fancy CTA band ---------- */
+.cta-band {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(150deg, var(--color-primary-deep) 0%, #23406b 70%) padding-box,
+    linear-gradient(120deg, #d9a441, #f472b6, #8052ff, #d9a441) border-box;
+}
+.cta-band::after {
+  content: "";
+  position: absolute;
+  inset: auto auto -55% -15%;
+  width: 380px; height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(128, 82, 255, 0.4), transparent 65%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+/* ---------- Hero extras ---------- */
+.hero-inner { will-change: transform, opacity; }
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: var(--space-3);
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #dbe7f5;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.hero-badge svg { color: var(--color-accent); }
+
+/* Icon badges get a gentle float */
+@keyframes badge-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.card .icon-badge { animation: badge-float 4.5s ease-in-out infinite; }
+.grid-3 .card:nth-child(2) .icon-badge,
+.grid-4 .card:nth-child(2) .icon-badge { animation-delay: -1.5s; }
+.grid-3 .card:nth-child(3) .icon-badge,
+.grid-4 .card:nth-child(3) .icon-badge { animation-delay: -3s; }
+@media (prefers-reduced-motion: reduce) { .card .icon-badge { animation: none; } }
+
+/* Tilt targets */
+[data-tilt] { transform-style: preserve-3d; will-change: transform; }
+[data-tilt] > * { transform: translateZ(24px); }
+
+/* Ensure hero/page-hero children sit above blobs */
+.hero .container, .page-hero .container { position: relative; z-index: 1; }
+
+/* Blob hosts must clip their decorations; belt-and-braces on body */
+.section.tinted { overflow: hidden; }
+body { overflow-x: clip; }
+
+/* Keep tile icons clear of the caption on small tiles */
+.photo-tile .tile-icon { top: 38%; transform: translate(-50%, -50%); }
+.photo-tile .tile-icon svg { width: clamp(36px, 22%, 64px); height: auto; }
+
+/* ---------- Pinned hero with scroll-scrubbed lotus bloom ---------- */
+.hero {
+  display: block;
+  min-height: 0;
+  height: 230vh;           /* scroll runway for the bloom scrub */
+  overflow: visible;
+  background: none;
+}
+.hero-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(168deg, #0d1e33 0%, #1e3a5f 58%, #274a77 100%);
+  color: #fff;
+}
+.hero-grid {
+  display: grid;
+  gap: var(--space-4);
+  align-items: center;
+}
+@media (min-width: 940px) {
+  .hero-grid { grid-template-columns: 1.08fr 0.92fr; gap: var(--space-6); }
+}
+.hero .hero-inner { padding-block: var(--space-6); }
+
+.hero-bloom {
+  position: relative;
+  width: min(480px, 88%);
+  margin-inline: auto;
+  filter: drop-shadow(0 24px 60px rgba(236, 72, 153, 0.28));
+}
+.hero-bloom svg { width: 100%; height: auto; max-height: 52vh; display: block; }
+.hero-bloom .petal { will-change: transform; }
+.bloom-hint {
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9fb3cc;
+  margin-top: 0.6rem;
+}
+@media (max-width: 939px) {
+  .hero-bloom svg { max-height: 34vh; }
+  .hero .display, .hero h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
+  .hero-badges { display: none; }   /* keep the 100vh stage uncramped on phones */
+}
+
+/* Rotating headline word */
+.word-rotate {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.word-rotate > span { display: inline-block; will-change: transform; }
