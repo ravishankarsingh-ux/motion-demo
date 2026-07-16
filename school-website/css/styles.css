@@ -1238,40 +1238,25 @@ body { overflow-x: clip; }
    v4 — full-page bus companion + realistic photo tiles
    ============================================================ */
 
-/* The bus rides a dashed lane down the right edge for the whole page */
-.page-bus-lane {
+/* The bus roams the viewport in a zig-zag as you scroll the page */
+.page-bus-free {
   position: fixed;
-  top: 96px;
-  bottom: 28px;
-  right: 16px;
-  width: 48px;
+  top: 0;
+  left: 0;
+  width: 68px;
+  height: 52px;
   z-index: 90;
   pointer-events: none;
+  will-change: transform;
+  filter: drop-shadow(0 6px 12px rgba(15, 23, 42, 0.3));
   display: none;
 }
 @media (min-width: 1100px) {
-  .page-bus-lane { display: block; }
+  .page-bus-free { display: block; }
 }
-.page-bus-lane::before {
-  content: "";
-  position: absolute;
-  top: 6px; bottom: 6px; left: 50%;
-  border-left: 3px dashed rgba(128, 141, 166, 0.4);
-  border-radius: 2px;
-}
-.page-bus {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 46px;
-  height: 46px;
-  margin-left: -23px;
-  will-change: transform;
-  filter: drop-shadow(0 4px 10px rgba(15, 23, 42, 0.35));
-}
-.page-bus svg { width: 100%; height: 100%; display: block; }
-.page-bus .bus-wheel-spokes { animation-play-state: paused; }
-.page-bus.moving .bus-wheel-spokes { animation-play-state: running; }
+.page-bus-free svg { width: 100%; height: 100%; display: block; }
+.page-bus-free .bus-wheel-spokes { animation-play-state: paused; }
+.page-bus-free.moving .bus-wheel-spokes { animation-play-state: running; }
 
 /* Realistic photos inside tiles (fall back to gradients if they fail) */
 .photo-tile .tile-img {

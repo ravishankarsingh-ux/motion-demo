@@ -193,9 +193,9 @@
     }, 3200);
   }
 
-  /* ---------- Full-page bus: rides the right edge with the scroll ---------- */
-  const BUS_SVG =
-    '<svg viewBox="-34 -32 68 42" aria-hidden="true"><g transform="rotate(90)">' +
+  /* ---------- Full-page bus: roams the viewport in a zig-zag ---------- */
+  const BUS_SVG_H =
+    '<svg viewBox="-34 -32 68 42" aria-hidden="true">' +
     '<g transform="translate(0 -3)">' +
     '<rect x="-30" y="-24" width="60" height="21" rx="5" fill="#f6b93b" stroke="#b8862c" stroke-width="1.5"/>' +
     '<rect x="-25" y="-20" width="10" height="8" rx="1.5" fill="#e8f4ff" stroke="#8a6420" stroke-width="0.8"/>' +
@@ -207,29 +207,48 @@
     '<g class="bus-wheel-spokes" stroke="#94a3b8" stroke-width="1.4"><path d="M-16 -4.5 V4.5 M-20.5 0 H-11.5"/></g>' +
     '<circle cx="17" cy="0" r="6.2" fill="#1e293b"/>' +
     '<g class="bus-wheel-spokes" stroke="#94a3b8" stroke-width="1.4"><path d="M17 -4.5 V4.5 M12.5 0 H21.5"/></g>' +
-    '</g></g></svg>';
+    '</g></svg>';
 
   function initPageBus() {
     if (!motionOk || !window.matchMedia('(min-width: 1100px)').matches) return;
-    const lane = document.createElement('div');
-    lane.className = 'page-bus-lane';
-    lane.setAttribute('aria-hidden', 'true');
     const bus = document.createElement('div');
-    bus.className = 'page-bus';
-    bus.innerHTML = BUS_SVG;
-    lane.appendChild(bus);
-    document.body.appendChild(lane);
+    bus.className = 'page-bus-free';
+    bus.setAttribute('aria-hidden', 'true');
+    bus.innerHTML = BUS_SVG_H;
+    document.body.appendChild(bus);
 
+    const WAVES = 3.5;         // full left-right crossings over the page
+    const TAU = Math.PI * 2;
     let current = 0;
     let idleFrames = 0;
+
+    function pose(p) {
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      const margin = 90;
+      const amp = Math.max(120, (W - margin * 2 - 68) / 2);
+      const cx = (W - 68) / 2;
+      const yTop = 130;
+      const yBot = H - 100;
+
+      const x = cx + amp * Math.sin(p * TAU * WAVES);
+      const y = yTop + p * (yBot - yTop);
+
+      // heading from the path derivative; flip the body when driving left
+      const dx = amp * TAU * WAVES * Math.cos(p * TAU * WAVES);
+      const dy = yBot - yTop;
+      const ang = Math.atan2(dy, dx) * 180 / Math.PI;
+      const flip = dx < 0 ? ' scale(1,-1)' : '';
+      bus.style.transform =
+        'translate(' + x + 'px, ' + y + 'px) rotate(' + ang + 'deg)' + flip;
+    }
+
     function frame() {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const target = max > 0 ? window.scrollY / max : 0;
       const delta = target - current;
-      current += delta * 0.1;
-      const laneH = lane.clientHeight - 46;
-      const lean = Math.max(-16, Math.min(16, delta * 900));
-      bus.style.transform = 'translateY(' + (current * laneH) + 'px) rotate(' + lean + 'deg)';
+      current += delta * 0.09;
+      pose(current);
       if (Math.abs(delta) > 0.0004) {
         idleFrames = 0;
         bus.classList.add('moving');
