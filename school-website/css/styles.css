@@ -1314,3 +1314,56 @@ body { overflow-x: clip; }
   width: 26px; height: 26px;
   filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
 }
+
+/* ============================================================
+   v5 — school doodle background for the journey section
+   ============================================================ */
+
+.journey-section { position: relative; }
+.journey-section .container { position: relative; z-index: 1; }
+
+.doodle-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.doodle {
+  position: absolute;
+  color: #1e3a5f;
+  opacity: 0.13;
+  will-change: transform;
+}
+.doodle.gold { color: #b8862c; opacity: 0.2; }
+.doodle svg { display: block; width: 100%; height: auto; }
+
+@keyframes doodle-bob {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-14px) rotate(4deg); }
+}
+@keyframes doodle-sway {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
+}
+@keyframes doodle-spin { to { transform: rotate(360deg); } }
+
+.doodle.bob  { animation: doodle-bob 7s ease-in-out infinite; }
+.doodle.sway { animation: doodle-sway 6s ease-in-out infinite; }
+.doodle.spin { animation: doodle-spin 30s linear infinite; }
+.doodle:nth-child(2n)  { animation-delay: -2.4s; }
+.doodle:nth-child(3n)  { animation-delay: -4.1s; }
+.doodle:nth-child(5n)  { animation-duration: 9s; }
+@media (prefers-reduced-motion: reduce) { .doodle { animation: none; } }
+
+/* paper plane flight path (behind the bus road) */
+#flight-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+#flight-path { stroke: #9db4d4; opacity: 0.5; }
+#paper-plane { will-change: transform; }

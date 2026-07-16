@@ -273,9 +273,24 @@
       }
     }
 
-    if (!motionOk) { setJourney(1); return; }
+    // paper plane glides along its own dotted flight path, slightly ahead
+    const flight = document.getElementById('flight-path');
+    const plane = document.getElementById('paper-plane');
+    const flightLen = flight ? flight.getTotalLength() : 0;
+    function setPlane(t) {
+      if (!flight || !plane) return;
+      const ft = Math.min(1, t * 1.15) * flightLen;
+      const pt = flight.getPointAtLength(ft);
+      const ahead = flight.getPointAtLength(Math.min(flightLen, ft + 3));
+      const behind = flight.getPointAtLength(Math.max(0, ft - 3));
+      const ang = Math.atan2(ahead.y - behind.y, ahead.x - behind.x) * 180 / Math.PI;
+      plane.setAttribute('transform', 'translate(' + pt.x + ' ' + pt.y + ') rotate(' + ang + ')');
+    }
+
+    if (!motionOk) { setJourney(1); setPlane(1); return; }
     setJourney(0);
-    window.Motion.scroll((p) => setJourney(p), {
+    setPlane(0);
+    window.Motion.scroll((p) => { setJourney(p); setPlane(p); }, {
       target: svg.closest('.journey-section'),
       offset: ['start 0.85', 'end 0.5'],
     });
