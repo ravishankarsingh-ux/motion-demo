@@ -1387,3 +1387,15 @@ body { overflow-x: clip; }
 }
 #flight-path { stroke: #9db4d4; opacity: 0.5; }
 #paper-plane { will-change: transform; }
+
+/* Hint under the 3D knowledge sphere */
+.scene-hint {
+  align-self: end;
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8b93a5;
+  margin: 0 0 1.2rem;
+}
+@media (max-width: 939px) { .scene-hint { display: none; } }
