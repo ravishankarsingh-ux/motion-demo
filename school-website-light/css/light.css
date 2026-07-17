@@ -88,7 +88,7 @@ body {
 }
 
 /* Pastel ambient shape field behind everything */
-#ambient-field { position: absolute; top: 0; left: 0; z-index: 0; pointer-events: none; }
+#ambient-field { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 main > *, .site-footer, .announce-bar { position: relative; z-index: 1; }
 
 /* Stronger section washes */
@@ -106,10 +106,7 @@ main > *, .site-footer, .announce-bar { position: relative; z-index: 1; }
 .reveal h2, .page-hero h1 { perspective: 700px; }
 .word-flip {
   display: inline-block;
-  will-change: transform, opacity;
   transform-origin: 50% 100%;
 }
 html.motion-ok .word-flip { opacity: 0; }
 
-/* Photo tiles: the wipe reveals a zooming photo */
-.photo-tile .tile-bg, .photo-tile .tile-img { will-change: transform; }

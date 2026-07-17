@@ -855,7 +855,6 @@ table caption { text-align: left; }
 .blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
   opacity: 0.42;
   pointer-events: none;
   will-change: transform;
@@ -908,8 +907,6 @@ table caption { text-align: left; }
 
 .photo-tile .tile-bg {
   position: absolute; inset: 0;
-  background-size: 220% 220%;
-  animation: tile-gradient 9s ease-in-out infinite;
 }
 @keyframes tile-gradient {
   0%, 100% { background-position: 0% 40%; }
@@ -1010,7 +1007,6 @@ table caption { text-align: left; }
   width: 380px; height: 380px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(128, 82, 255, 0.4), transparent 65%);
-  filter: blur(30px);
   pointer-events: none;
 }
 
@@ -1358,7 +1354,6 @@ body { overflow-x: clip; }
   position: absolute;
   color: #1e3a5f;
   opacity: 0.13;
-  will-change: transform;
 }
 .doodle.gold { color: #b8862c; opacity: 0.2; }
 .doodle svg { display: block; width: 100%; height: auto; }

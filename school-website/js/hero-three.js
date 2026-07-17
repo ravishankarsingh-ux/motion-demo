@@ -24,7 +24,7 @@ function init(canvas) {
     antialias: true,
     powerPreference: 'low-power',
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
   /* ----- Lights ----- */
   scene.add(new THREE.AmbientLight(0x8fb0d8, 0.7));
@@ -36,7 +36,7 @@ function init(canvas) {
   scene.add(rimLight);
 
   /* ----- Golden particle field ----- */
-  const PARTICLES = 900;
+  const PARTICLES = 600;
   const positions = new Float32Array(PARTICLES * 3);
   const sizes = new Float32Array(PARTICLES);
   for (let i = 0; i < PARTICLES; i++) {

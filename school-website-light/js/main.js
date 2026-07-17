@@ -81,16 +81,17 @@
       }, { target: hero, offset: ['start start', 'end end'] });
     }
 
-    // parallax blobs — each moves at its own speed while its host scrolls
-    document.querySelectorAll('[data-parallax]').forEach((el) => {
+    // parallax blobs — desktop only; phones keep scrolling cheap
+    const wideScreen = window.matchMedia('(min-width: 900px)').matches;
+    if (wideScreen) document.querySelectorAll('[data-parallax]').forEach((el) => {
       const speed = parseFloat(el.dataset.parallax) || 0.15;
       scroll((p) => {
         el.style.translate = '0 ' + ((p - 0.5) * -320 * speed) + 'px';
       }, { target: el.parentElement, offset: ['start end', 'end start'] });
     });
 
-    // photo tiles drift subtly against scroll for depth
-    document.querySelectorAll('.grid-tiles .photo-tile').forEach((tile, i) => {
+    // photo tiles drift subtly against scroll for depth (desktop only)
+    if (wideScreen) document.querySelectorAll('.grid-tiles .photo-tile').forEach((tile, i) => {
       scroll((p) => {
         tile.style.translate = '0 ' + ((p - 0.5) * (i % 2 ? -36 : 36)) + 'px';
       }, { target: tile.parentElement, offset: ['start end', 'end start'] });
