@@ -39,6 +39,7 @@ jobs:
           mkdir -p _site
           cp -r school-website/. _site/
           cp -r school-website-light _site/light
+          cp -r school-website-light _site/school-website-light
 
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
