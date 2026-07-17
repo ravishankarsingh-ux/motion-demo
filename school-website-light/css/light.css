@@ -75,3 +75,41 @@
    transform would fight it, so limit them to shadows. */
 .card, .news-card, .photo-tile, .quick-link { transition-property: box-shadow; }
 .card:hover, .news-card:hover, .quick-link:hover { transform: none; }
+
+/* ============================================================
+   Light edition v2 — fuller frames, bolder motion
+   ============================================================ */
+
+/* Dotted-paper texture so open space never reads as empty */
+body {
+  background-color: var(--color-background);
+  background-image: radial-gradient(rgba(30, 58, 95, 0.055) 1.2px, transparent 1.3px);
+  background-size: 26px 26px;
+}
+
+/* Pastel ambient shape field behind everything */
+#ambient-field { position: absolute; top: 0; left: 0; z-index: 0; pointer-events: none; }
+main > *, .site-footer, .announce-bar { position: relative; z-index: 1; }
+
+/* Stronger section washes */
+.section.tinted {
+  background:
+    radial-gradient(900px 420px at 90% -10%, rgba(217, 164, 65, 0.16), transparent 60%),
+    radial-gradient(800px 420px at -10% 110%, rgba(37, 99, 235, 0.13), transparent 60%),
+    linear-gradient(180deg, #e9f1fb, #f4f8fd);
+  border-block: 1px solid #e0eaf4;
+}
+.blob { opacity: 0.5; }
+
+/* 3D stages for flips */
+[data-stagger] { perspective: 1200px; }
+.reveal h2, .page-hero h1 { perspective: 700px; }
+.word-flip {
+  display: inline-block;
+  will-change: transform, opacity;
+  transform-origin: 50% 100%;
+}
+html.motion-ok .word-flip { opacity: 0; }
+
+/* Photo tiles: the wipe reveals a zooming photo */
+.photo-tile .tile-bg, .photo-tile .tile-img { will-change: transform; }

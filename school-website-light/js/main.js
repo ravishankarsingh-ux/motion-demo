@@ -107,6 +107,33 @@
     zoom:  { opacity: [0, 1], scale: [0.8, 1] },
   };
 
+  // Wrap each word of a heading in a span so it can flip in on its own.
+  // Walks text nodes only, so nested spans (gradient phrases) survive.
+  function splitWords(el) {
+    if (el.dataset.split || el.querySelector('.word-rotate')) return [];
+    el.dataset.split = '1';
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    while (walker.nextNode()) {
+      if (walker.currentNode.textContent.trim()) textNodes.push(walker.currentNode);
+    }
+    const spans = [];
+    textNodes.forEach((node) => {
+      const frag = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach((part) => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+        const sp = document.createElement('span');
+        sp.className = 'word-flip';
+        sp.textContent = part;
+        frag.appendChild(sp);
+        spans.push(sp);
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+    return spans;
+  }
+
   function initReveals() {
     if (!motionOk) return;
     const { animate, inView, stagger } = window.Motion;
@@ -116,30 +143,54 @@
       inView(el, (target) => { animate(target, variant, SPRING); }, { amount: 0.18 });
     });
 
-    // Grids: springy cascade
+    // Headings: every word flips up from below like a card on a hinge
+    document.querySelectorAll('.section h2, .page-hero h1').forEach((h) => {
+      const words = splitWords(h);
+      if (!words.length) return;
+      inView(h, () => {
+        animate(
+          words,
+          { opacity: [0, 1], rotateX: [85, 0], y: ['0.5em', '0em'] },
+          { type: 'spring', stiffness: 190, damping: 19, delay: stagger(0.05) }
+        );
+      }, { amount: 0.6 });
+    });
+
+    // Grids: cards swing in like doors (rotateY spring cascade)
     document.querySelectorAll('[data-stagger]').forEach((group) => {
       const items = Array.from(group.children);
       if (!items.length) return;
-      items.forEach((it) => { it.style.opacity = '0'; });
+      items.forEach((it) => {
+        it.style.opacity = '0';
+        it.style.transformOrigin = 'left center';
+      });
       inView(group, () => {
         animate(
           items,
-          { opacity: [0, 1], y: [52, 0], scale: [0.9, 1] },
-          Object.assign({ delay: stagger(0.08) }, SPRING)
+          { opacity: [0, 1], rotateY: [55, 0], y: [36, 0] },
+          Object.assign({ delay: stagger(0.09) }, SPRING)
         );
       }, { amount: 0.12 });
     });
 
-    // Photo tiles and the campus art wipe open with a clip-path curtain
+    // Photo tiles and the campus art: clip-path curtain wipe while the
+    // picture inside settles back from a zoom
     document.querySelectorAll('.photo-tile, .campus-art').forEach((el, i) => {
       inView(el, (target) => {
         animate(
           target,
           { clipPath: ['inset(0 100% 0 0 round 22px)', 'inset(0 0% 0 0 round 22px)'], opacity: [0.4, 1] },
-          { duration: 0.9, delay: (i % 4) * 0.08, ease: [0.77, 0, 0.18, 1] }
+          { duration: 0.85, delay: (i % 4) * 0.08, ease: [0.77, 0, 0.18, 1] }
         );
+        const inner = target.querySelectorAll('.tile-bg, .tile-img, svg');
+        if (inner.length) {
+          animate(inner, { scale: [1.22, 1] }, { duration: 1.1, delay: (i % 4) * 0.08, ease: [0.22, 1, 0.36, 1] });
+        }
       }, { amount: 0.25 });
     });
+
+    // News cards flip in as they are injected (grid observed after load)
+    document.querySelectorAll('.news-grid').forEach((grid) => { grid.style.perspective = '1200px'; });
   }
 
   /* ---------- Hero: lotus bloom scrubbed by scroll ---------- */
