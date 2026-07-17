@@ -1,13 +1,11 @@
-name: Deploy school website to GitHub Pages
+name: Deploy site to GitHub Pages
 
 on:
   push:
     branches:
       - main
-    paths:
-      - "school-website/**"
-      - "school-website-light/**"
-      - ".github/workflows/deploy-pages.yml"
+    paths-ignore:
+      - "README.md"
   workflow_dispatch:
 
 permissions:
@@ -34,17 +32,10 @@ jobs:
         with:
           enablement: true
 
-      - name: Assemble site (dark at root, light at /light/)
-        run: |
-          mkdir -p _site
-          cp -r school-website/. _site/
-          cp -r school-website-light _site/light
-          cp -r school-website-light _site/school-website-light
-
-      - name: Upload site
+      - name: Upload site (repository structure as-is)
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: .
 
       - name: Deploy to GitHub Pages
         id: deployment
