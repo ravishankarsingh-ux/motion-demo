@@ -212,3 +212,27 @@ p { color: #c9c9d2; }
 
 /* ---------- Scroll progress: brighter on dark ---------- */
 .scroll-progress { height: 3px; }
+
+/* ---------- Hero orbit labels ---------- */
+.hero-label {
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.4rem 0.7rem;
+  border-radius: 10px;
+  background: rgba(14, 14, 20, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+.hero-label small { font-weight: 500; font-size: 0.68rem; color: #9a9aa5; }
+.lbl-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+@media (max-width: 939px) { .hero-label { display: none; } }

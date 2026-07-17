@@ -151,6 +151,39 @@ function init(canvas) {
 
   scene.add(core);
 
+  /* ----- Camera-facing labels riding the orbs ----- */
+  const labelDefs = [
+    { mesh: orbits[0].spinner.children[0], title: 'Science' },
+    { mesh: orbits[0].spinner.children[1], title: 'Arts' },
+    { mesh: orbits[1].spinner.children[0], title: 'Sport' },
+  ];
+  const stage = document.querySelector('.hero-sticky') || canvas.parentElement;
+  labelDefs.forEach((d) => {
+    const el = document.createElement('span');
+    el.className = 'hero-label';
+    el.innerHTML = '<span class="lbl-dot" style="background:#' + d.mesh.material.color.getHexString() + '"></span>' + d.title;
+    stage.appendChild(el);
+    d.el = el;
+  });
+  const tmpVec = new THREE.Vector3();
+  const camDir = new THREE.Vector3();
+
+  function updateLabels(late) {
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    camDir.copy(camera.position).sub(core.position).normalize();
+    labelDefs.forEach((d) => {
+      d.mesh.getWorldPosition(tmpVec);
+      // fade labels that swing behind the sphere
+      const facing = tmpVec.clone().sub(core.position).normalize().dot(camDir);
+      const v = tmpVec.project(camera);
+      const x = (v.x * 0.5 + 0.5) * w;
+      const y = (-v.y * 0.5 + 0.5) * h;
+      d.el.style.transform = 'translate(-50%, -160%) translate(' + x + 'px, ' + y + 'px)';
+      d.el.style.opacity = String(Math.max(0, late * (0.35 + 0.65 * Math.max(0, facing))));
+    });
+  }
+
   /* ----- Backdrop halo particles ----- */
   const HALO = 420;
   const haloPos = new Float32Array(HALO * 3);
@@ -227,6 +260,8 @@ function init(canvas) {
     orbits[0].spinner.rotation.z = t * 0.5;
     orbits[1].spinner.rotation.z = -t * 0.34;
     halo.rotation.y = t * 0.015;
+
+    updateLabels(late);
 
     // camera: dolly in as the sphere assembles
     const targetX = pointer.x * 1.2;
